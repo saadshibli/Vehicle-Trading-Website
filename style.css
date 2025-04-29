@@ -1,0 +1,132 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.navbar {
+    background: linear-gradient(90deg, #1e3c72, #2a5298);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+.navbar-brand i {
+    color: #ffc107;
+}
+.nav-link {
+    color: #ffffff !important;
+    font-weight: 500;
+}
+.nav-link:hover {
+    color: #ffc107 !important;
+}
+.dropdown-menu {
+    background-color: #2a5298;
+}
+.dropdown-item {
+    color: #ffffff !important;
+}
+.dropdown-item:hover {
+    background-color: #1e3c72;
+    color: #ffc107 !important;
+}
+.card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #ffffff;
+}
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+.badge-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+}
+.badge.bg-primary {
+    background-color: #2a5298 !important;
+}
+.badge.bg-success {
+    background-color: #28a745 !important;
+}
+.badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000;
+}
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #2a5298;
+}
+.card-title span {
+    color: #28a745;
+}
+.button-group .btn {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+.btn-primary {
+    background-color: #2a5298;
+    border: none;
+}
+.btn-primary:hover {
+    background-color: #1e3c72;
+}
+.btn-success {
+    background-color: #fd7e14;
+    border: none;
+}
+.btn-success:hover {
+    background-color: #a74600;
+}
+.btn-outline-warning {
+    border-color: #ffc107;
+    color: #ffc107;
+}
+.btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: #000;
+}
+.pagination .page-item.active .page-link {
+    background-color: #2a5298;
+    border-color: #2a5298;
+}
+.pagination .page-link {
+    color: #000;
+}
+.pagination .page-link:hover {
+    background-color: #1e3c72;
+    color: #ffffff;
+}
+footer {
+    background: linear-gradient(90deg, #1e3c72, #2a5298);
+    color: #ffffff;
+    padding: 2rem 0;
+}
+footer h5 {
+    color: #ffc107;
+}
+footer a {
+    color: #ffffff;
+    text-decoration: none;
+}
+footer a:hover {
+    color: #ffc107;
+}
+footer .fab {
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+}
+footer .fab:hover {
+    color: #ffc107;
+}

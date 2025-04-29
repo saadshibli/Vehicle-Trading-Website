@@ -1,0 +1,9 @@
+    -Container Class
+    -Grid elements
+    -Buttons
+    -Font & Image Scaling
+    -Gutter Elements
+    -Responsive navigation bar with dropdown menus for sections
+    -Show the utility of Bootstrap Typography elements
+    -Use Bootstrap Utilities like margins padding, Toggle Visibility etc to customize the webpage layout
+    -Use pagination, Badges and Level elements

@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Your Cart - CarTech</title>
+    <style>
+        .cart-img {
+            height: 100px;
+            width: 150px;
+            object-fit: cover;
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .quantity-control button {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .empty-cart-container {
+            text-align: center;
+            padding: 50px 0;
+        }
+        .empty-cart-icon {
+            font-size: 80px;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        .checkout-section {
+            display: none;
+        }
+        .checkout-section.active {
+            display: block;
+        }
+        .form-check-input:checked {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+    </style>
+</head>
+<body>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-car me-2"></i>CarTech
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/home.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Listings</a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/listing.html" onclick="filterCars('all')">All Vehicles</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/listing.html" onclick="filterCars('new')">New Vehicles</a></li>
+                            <li><a class="dropdown-item" href="/listing.html" onclick="filterCars('used')">Used Vehicles</a></li>
+                            <li><a class="dropdown-item" href="/listing.html" onclick="filterCars('ev')">Electric Vehicles</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/sell.html">Sell Your Car</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="/cart.html">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                            <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer"></div>
+
+    <!-- Shopping Cart -->
+    <div class="container my-5" id="cartPage">
+        <h2 class="mb-4">Your Shopping Cart</h2>
+        
+        <div id="cartContent">
+            <!-- Cart items will be loaded here -->
+        </div>
+        
+        <div class="row mt-4" id="cartSummary">
+            <!-- Cart summary will be loaded here -->
+        </div>
+
+        <!-- Checkout Form - New Addition -->
+        <div id="checkoutForm" class="mt-5 d-none">
+            <h3 class="mb-3">Complete Your Purchase</h3>
+            
+            <!-- Checkout Progress -->
+            <div class="progress mb-4" style="height: 5px;">
+                <div id="checkoutProgress" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            
+            <!-- Steps Indicator -->
+            <div class="d-flex justify-content-between mb-4">
+                <span class="step-indicator active" data-step="1">1. Personal Info</span>
+                <span class="step-indicator" data-step="2">2. Address</span>
+                <span class="step-indicator" data-step="3">3. Payment</span>
+                <span class="step-indicator" data-step="4">4. Confirm</span>
+            </div>
+            
+            <!-- Step 1: Personal Information -->
+            <div class="checkout-section active" data-section="1">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="firstName" class="form-label">First Name*</label>
+                        <input type="text" class="form-control" id="firstName" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="lastName" class="form-label">Last Name*</label>
+                        <input type="text" class="form-control" id="lastName" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">Email*</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="phone" class="form-label">Phone Number*</label>
+                        <input type="tel" class="form-control" id="phone" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="idProof" class="form-label">ID Proof (Driving License/Aadhar)</label>
+                        <input type="text" class="form-control" id="idProof">
+                    </div>
+                    <div class="col-12 mt-4">
+                        <button class="btn btn-primary" onclick="nextCheckoutStep(1)">Continue</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 2: Address Information -->
+            <div class="checkout-section" data-section="2">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="addressLine1" class="form-label">Address Line 1*</label>
+                        <input type="text" class="form-control" id="addressLine1" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="addressLine2" class="form-label">Address Line 2</label>
+                        <input type="text" class="form-control" id="addressLine2">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="city" class="form-label">City*</label>
+                        <input type="text" class="form-control" id="city" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="state" class="form-label">State*</label>
+                        <select class="form-select" id="state" required>
+                            <option value="">Choose...</option>
+                            <option value="AP">Andhra Pradesh</option>
+                            <option value="AR">Arunachal Pradesh</option>
+                            <option value="AS">Assam</option>
+                            <option value="BR">Bihar</option>
+                            <option value="CT">Chhattisgarh</option>
+                            <option value="GA">Goa</option>
+                            <option value="GJ">Gujarat</option>
+                            <option value="HR">Haryana</option>
+                            <option value="HP">Himachal Pradesh</option>
+                            <option value="JH">Jharkhand</option>
+                            <option value="KA">Karnataka</option>
+                            <option value="KL">Kerala</option>
+                            <option value="MP">Madhya Pradesh</option>
+                            <option value="MH">Maharashtra</option>
+                            <option value="MN">Manipur</option>
+                            <option value="ML">Meghalaya</option>
+                            <option value="MZ">Mizoram</option>
+                            <option value="NL">Nagaland</option>
+                            <option value="OD">Odisha</option>
+                            <option value="PB">Punjab</option>
+                            <option value="RJ">Rajasthan</option>
+                            <option value="SK">Sikkim</option>
+                            <option value="TN">Tamil Nadu</option>
+                            <option value="TG">Telangana</option>
+                            <option value="TR">Tripura</option>
+                            <option value="UP">Uttar Pradesh</option>
+                            <option value="UK">Uttarakhand</option>
+                            <option value="WB">West Bengal</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="zipCode" class="form-label">ZIP Code*</label>
+                        <input type="text" class="form-control" id="zipCode" required>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <button class="btn btn-secondary me-2" onclick="prevCheckoutStep(2)">Back</button>
+                        <button class="btn btn-primary" onclick="nextCheckoutStep(2)">Continue</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 3: Payment Information -->
+            <div class="checkout-section" data-section="3">
+                <div class="row g-3">
+                    <div class="col-12 mb-3">
+                        <h5>Payment Method</h5>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="creditCard" checked>
+                            <label class="form-check-label" for="creditCard">Credit Card</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="debitCard" value="debitCard">
+                            <label class="form-check-label" for="debitCard">Debit Card</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="netBanking" value="netBanking">
+                            <label class="form-check-label" for="netBanking">Net Banking</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="upi" value="upi">
+                            <label class="form-check-label" for="upi">UPI</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Credit Card Form (Default) -->
+                    <div id="creditCardForm" class="payment-form">
+                        <div class="col-12">
+                            <label for="cardName" class="form-label">Name on Card*</label>
+                            <input type="text" class="form-control" id="cardName" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="cardNumber" class="form-label">Card Number*</label>
+                            <input type="text" class="form-control" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="expiryDate" class="form-label">Expiry Date*</label>
+                                <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cvv" class="form-label">CVV*</label>
+                                <input type="text" class="form-control" id="cvv" placeholder="XXX" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 mt-4">
+                        <button class="btn btn-secondary me-2" onclick="prevCheckoutStep(3)">Back</button>
+                        <button class="btn btn-primary" onclick="nextCheckoutStep(3)">Continue</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step 4: Confirmation -->
+            <div class="checkout-section" data-section="4">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Order Summary</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="orderSummaryItems">
+                                    <!-- Items will be added here dynamically -->
+                                </div>
+                                <hr>
+                                <div id="orderSummaryTotal">
+                                    <!-- Total will be added here dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 mt-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Delivery Details</h5>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Name:</strong> <span id="summaryName"></span></p>
+                                <p><strong>Email:</strong> <span id="summaryEmail"></span></p>
+                                <p><strong>Phone:</strong> <span id="summaryPhone"></span></p>
+                                <p><strong>Address:</strong> <span id="summaryAddress"></span></p>
+                                <p><strong>Payment Method:</strong> <span id="summaryPayment"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 mt-4">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" value="" id="termsCheck" required>
+                            <label class="form-check-label" for="termsCheck">
+                                I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a>
+                            </label>
+                        </div>
+                        
+                        <button class="btn btn-secondary me-2" onclick="prevCheckoutStep(4)">Back</button>
+                        <button class="btn btn-success" onclick="placeOrder()" id="placeOrderBtn" disabled>Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms and Conditions Modal -->
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>1. Vehicle Purchase Agreement</h6>
+                    <p>This purchase agreement constitutes the entire agreement between CarTech and the Customer regarding the purchase of the vehicle(s) listed in the order.</p>
+                    
+                    <h6>2. Payment Terms</h6>
+                    <p>Full payment is required to complete the purchase. The Customer understands that any applicable taxes, registration fees, and delivery charges are included in the final price.</p>
+                    
+                    <h6>3. Vehicle Condition</h6>
+                    <p>All vehicles are sold as described. New vehicles come with manufacturer warranty. Used vehicles are sold as-is unless otherwise specified.</p>
+                    
+                    <h6>4. Delivery</h6>
+                    <p>Delivery time varies based on location and vehicle availability. Customer will be notified of the estimated delivery date after order confirmation.</p>
+                    
+                    <h6>5. Cancellation Policy</h6>
+                    <p>Orders may be cancelled within 24 hours at no charge. Cancellations after 24 hours may incur a processing fee of 2% of the vehicle price.</p>
+                    
+                    <h6>6. Privacy Policy</h6>
+                    <p>Customer information will be handled according to our Privacy Policy. Personal information will be used only for order processing and will not be shared with third parties except as required for processing the transaction.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">I Understand</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>CarTech</h5>
+                    <p>"Your gateway to stress-free automotive transactions"</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/about.html" class="text-white">About Us</a></li>
+                        <li><a href="/sell.html" class="text-white">Services</a></li>
+                        <li><a href="/contact.html" class="text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect With Us</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="cart.js"></script>
+    
+    <script>
+        // Load cart items
+        function loadCartItems() {
+            const cartContentElement = document.getElementById('cartContent');
+            const cartSummaryElement = document.getElementById('cartSummary');
+            
+            if (cart.length === 0) {
+                // Show empty cart message
+                cartContentElement.innerHTML = `
+                    <div class="empty-cart-container">
+                        <div class="empty-cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h3>Your cart is empty</h3>
+                        <p class="mb-4">Explore our vehicles and find your perfect match!</p>
+                        <a href="/listing.html" class="btn btn-primary">Browse Vehicles</a>
+                    </div>
+                `;
+                cartSummaryElement.innerHTML = '';
+                
+                // Hide checkout form if visible
+                document.getElementById('checkoutForm').classList.add('d-none');
+                return;
+            }
+            
+            // Build the cart items table
+            let cartHTML = `
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Vehicle</th>
+                                <th>Details</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            let subtotal = 0;
+            
+            cart.forEach(item => {
+                // Extract price numeric value
+                const priceValue = parseFloat(item.price.replace(/[^\d.]/g, ''));
+                const totalItemPrice = priceValue * item.quantity;
+                subtotal += totalItemPrice;
+                
+                cartHTML += `
+                    <tr>
+                        <td>
+                            <img src="${item.image}" alt="${item.title}" class="cart-img rounded">
+                        </td>
+                        <td>
+                            <h5>${item.title}</h5>
+                            <p>Year: ${item.year}</p>
+                        </td>
+                        <td>${item.price}</td>
+                        <td>
+                            <div class="quantity-control">
+                                <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity('${item.id}', -1)">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="mx-2">${item.quantity}</span>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity('${item.id}', 1)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </td>
+                        <td>₹${totalItemPrice.toLocaleString('en-IN')}</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" onclick="removeFromCart('${item.id}')" 
+                                data-bs-toggle="tooltip" data-bs-placement="top" title="Remove from cart">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            cartHTML += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            cartContentElement.innerHTML = cartHTML;
+            
+            // Calculate taxes and total
+            const tax = subtotal * 0.18; // 18% GST
+            const total = subtotal + tax;
+            
+            // Build the summary section
+            const summaryHTML = `
+                <div class="col-md-6 offset-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Order Summary</h5>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal:</span>
+                                <span>₹${subtotal.toLocaleString('en-IN')}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Tax (18% GST):</span>
+                                <span>₹${tax.toLocaleString('en-IN')}</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between mb-3 fw-bold">
+                                <span>Total:</span>
+                                <span>₹${total.toLocaleString('en-IN')}</span>
+                            </div>
+                            <button class="btn btn-primary w-100" onclick="startCheckout()">
+                                Proceed to Checkout
+                            </button>
+                            <button class="btn btn-outline-secondary w-100 mt-2" onclick="clearCart()">
+                                Clear Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            cartSummaryElement.innerHTML = summaryHTML;
+            
+            // Initialize tooltips
+            initTooltipsAndPopovers();
+            
+            // Update order summary if at confirmation step
+            if (document.querySelector('.checkout-section[data-section="4"]').classList.contains('active')) {
+                updateOrderSummary();
+            }
+        }
+        
+        // Start checkout process
+        function startCheckout() {
+            // Show checkout form
+            document.getElementById('checkoutForm').classList.remove('d-none');
+            
+            // Scroll to checkout form
+            document.getElementById('checkoutForm').scrollIntoView({ behavior: 'smooth' });
+            
+            // Reset to first step
+            showCheckoutStep(1);
+        }
+        
+        // Show specific checkout step
+        function showCheckoutStep(step) {
+            // Hide all sections
+            document.querySelectorAll('.checkout-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show current section
+            document.querySelector(`.checkout-section[data-section="${step}"]`).classList.add('active');
+            
+            // Update progress bar
+            const progress = (step / 4) * 100;
+            document.getElementById('checkoutProgress').style.width = `${progress}%`;
+            document.getElementById('checkoutProgress').setAttribute('aria-valuenow', progress);
+            
+            // Update step indicators
+            document.querySelectorAll('.step-indicator').forEach(indicator => {
+                if (parseInt(indicator.dataset.step) <= step) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+            
+            // If final step, update summary
+            if (step === 4) {
+                updateOrderSummary();
+            }
+        }
+        
+        // Next checkout step
+        function nextCheckoutStep(currentStep) {
+            // Simple validation (could be enhanced)
+            if (currentStep === 1) {
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                
+                if (!firstName || !lastName || !email || !phone) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+            } else if (currentStep === 2) {
+                const addressLine1 = document.getElementById('addressLine1').value;
+                const city = document.getElementById('city').value;
+                const state = document.getElementById('state').value;
+                const zipCode = document.getElementById('zipCode').value;
+                
+                if (!addressLine1 || !city || !state || !zipCode) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+            } else if (currentStep === 3) {
+                const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+                
+                if (paymentMethod === 'creditCard' || paymentMethod === 'debitCard') {
+                    const cardName = document.getElementById('cardName').value;
+                    const cardNumber = document.getElementById('cardNumber').value;
+                    const expiryDate = document.getElementById('expiryDate').value;
+                    const cvv = document.getElementById('cvv').value;
+                    
+                    if (!cardName || !cardNumber || !expiryDate || !cvv) {
+                        alert('Please fill in all required card details.');
+                        return;
+                    }
+                }
+            }
+            
+            showCheckoutStep(currentStep + 1);
+        }
+        
+        // Previous checkout step
+        function prevCheckoutStep(currentStep) {
+            showCheckoutStep(currentStep - 1);
+        }
+        
+        // Update order summary
+        function updateOrderSummary() {
+            const orderSummaryItems = document.getElementById('orderSummaryItems');
+            const orderSummaryTotal = document.getElementById('orderSummaryTotal');
+            
+            // Build items list
+            let itemsHTML = '';
+            let subtotal = 0;
+            
+            cart.forEach(item => {
+                const priceValue = parseFloat(item.price.replace(/[^\d.]/g, ''));
+                const totalItemPrice = priceValue * item.quantity;
+                subtotal += totalItemPrice;
+                
+                itemsHTML += `
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>${item.title} x ${item.quantity}</span>
+                        <span>₹${totalItemPrice.toLocaleString('en-IN')}</span>
+                    </div>
+                `;
+            });
+            
+            orderSummaryItems.innerHTML = itemsHTML;
+            
+            // Calculate taxes and total
+            const tax = subtotal * 0.18; // 18% GST
+            const total = subtotal + tax;
+            
+            // Build total section
+            const totalHTML = `
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal:</span>
+                    <span>₹${subtotal.toLocaleString('en-IN')}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Tax (18% GST):</span>
+                    <span>₹${tax.toLocaleString('en-IN')}</span>
+                </div>
+                <div class="d-flex justify-content-between fw-bold">
+                    <span>Total:</span>
+                    <span>₹${total.toLocaleString('en-IN')}</span>
+                </div>
+            `;
+            
+            orderSummaryTotal.innerHTML = totalHTML;
+            
+            // Update customer details
+            document.getElementById('summaryName').textContent = 
+                `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`;
+            document.getElementById('summaryEmail').textContent = document.getElementById('email').value;
+            document.getElementById('summaryPhone').textContent = document.getElementById('phone').value;
+            
+            // Address
+            const addressLine1 = document.getElementById('addressLine1').value;
+            const addressLine2 = document.getElementById('addressLine2').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            const zipCode = document.getElementById('zipCode').value;
+            
+            const fullAddress = `${addressLine1}, ${addressLine2 ? addressLine2 + ', ' : ''}${city}, ${state} - ${zipCode}`;
+            document.getElementById('summaryAddress').textContent = fullAddress;
+            
+            // Payment method
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            let paymentDisplay = '';
+            
+            switch(paymentMethod) {
+                case 'creditCard':
+                    paymentDisplay = 'Credit Card';
+                    break;
+                case 'debitCard':
+                    paymentDisplay = 'Debit Card';
+                    break;
+                case 'netBanking':
+                    paymentDisplay = 'Net Banking';
+                    break;
+                case 'upi':
+                    paymentDisplay = 'UPI';
+                    break;
+            }
+            
+            document.getElementById('summaryPayment').textContent = paymentDisplay;
+        }
+        
+        // Handle terms checkbox
+        document.addEventListener('DOMContentLoaded', function() {
+            const termsCheck = document.getElementById('termsCheck');
+            const placeOrderBtn = document.getElementById('placeOrderBtn');
+            
+            termsCheck.addEventListener('change', function() {
+                placeOrderBtn.disabled = !this.checked;
+            });
+        });
+        
+        // Place order function
+        function placeOrder() {
+            // Show loading state
+            const placeOrderBtn = document.getElementById('placeOrderBtn');
+            const originalText = placeOrderBtn.innerHTML;
+            placeOrderBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+            placeOrderBtn.disabled = true;
+            
+            // Simulate processing delay
+            setTimeout(() => {
+                // Show successful order modal
+                const modalHtml = `
+                    <div class="modal fade" id="orderConfirmModal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-success text-white">
+                                    <h5 class="modal-title">Order Confirmed!</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <i class="fas fa-check-circle text-success" style="font-size: 50px;"></i>
+                                    <h4 class="mt-3">Thank you for your purchase!</h4>
+                                    <p>Your order has been confirmed. Our representative will contact you shortly.</p>
+                                    <p>Order #: ORD-${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="/listing.html" class="btn btn-primary">Continue Shopping</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Add modal to body
+                const modalContainer = document.createElement('div');
+                modalContainer.innerHTML = modalHtml;
+                document.body.appendChild(modalContainer);
+                
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('orderConfirmModal'));
+                modal.show();
+                
+                // Reset button state
+                placeOrderBtn.innerHTML = originalText;
+                placeOrderBtn.disabled = false;
+                
+                // Clear cart
+                cart = [];
+                localStorage.setItem('carCart', JSON.stringify(cart));
+                updateCartCount();
+                
+                // After modal is closed, redirect to home
+                document.getElementById('orderConfirmModal').addEventListener('hidden.bs.modal', function() {
+                    modalContainer.remove();
+                    window.location.href = '/listing.html';
+                });
+            }, 2000);
+        }
+        // Update quantity function
+        function updateQuantity(itemId, change) {
+            // Find the item in the cart
+            const itemIndex = cart.findIndex(item => item.id === itemId);
+            
+            if (itemIndex !== -1) {
+                // Update quantity (minimum 1)
+                cart[itemIndex].quantity = Math.max(1, cart[itemIndex].quantity + change);
+                
+                // Save updated cart to localStorage
+                localStorage.setItem('carCart', JSON.stringify(cart));
+                
+                // Show toast notification
+                showToast(`Quantity updated: ${cart[itemIndex].title}`);
+                
+                // Refresh cart display
+                loadCartItems();
+                updateCartCount();
+            }
+        }
+
+        // Remove item from cart
+        function removeFromCart(itemId) {
+            // Filter out the item to remove
+            cart = cart.filter(item => item.id !== itemId);
+            
+            // Save updated cart to localStorage
+            localStorage.setItem('carCart', JSON.stringify(cart));
+            
+            // Show toast notification
+            showToast('Item removed from cart');
+            
+            // Refresh cart display
+            loadCartItems();
+            updateCartCount();
+        }
+
+        // Clear entire cart
+        function clearCart() {
+            if (confirm('Are you sure you want to empty your cart?')) {
+                // Empty cart array
+                cart = [];
+                
+                // Save empty cart to localStorage
+                localStorage.setItem('carCart', JSON.stringify(cart));
+                
+                // Show toast notification
+                showToast('Cart cleared');
+                
+                // Refresh cart display
+                loadCartItems();
+                updateCartCount();
+            }
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toastContainer = document.getElementById('toastContainer');
+            
+            const toastId = `toast-${Date.now()}`;
+            const toastHTML = `
+                <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto">CarTech</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+            
+            toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+            
+            const toastElement = document.getElementById(toastId);
+            const bsToast = new bootstrap.Toast(toastElement, { autohide: true, delay: 3000 });
+            bsToast.show();
+            
+            // Remove toast element after it's hidden
+            toastElement.addEventListener('hidden.bs.toast', function() {
+                toastElement.remove();
+            });
+        }
+
+        // Initialize tooltips and popovers
+        function initTooltipsAndPopovers() {
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+            popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl);
+            });
+        }
+
+        // Handle payment method change
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentMethods = document.querySelectorAll('input[name="paymentMethod"]');
+            
+            paymentMethods.forEach(method => {
+                method.addEventListener('change', function() {
+                    const paymentMethod = this.value;
+                    
+                    // You can add logic here to show/hide different payment forms
+                    // For now, we only have the credit card form
+                });
+            });
+            
+            // Initialize cart
+            if (!localStorage.getItem('carCart')) {
+                localStorage.setItem('carCart', JSON.stringify([]));
+            }
+            
+            // Load cart from localStorage
+            cart = JSON.parse(localStorage.getItem('carCart')) || [];
+            
+            // Load cart items
+            loadCartItems();
+            
+            // Update cart count
+            updateCartCount();
+        });
+
+        // Update cart count in navbar
+        function updateCartCount() {
+            const cartCountElement = document.getElementById('cartCount');
+            
+            if (cartCountElement) {
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                cartCountElement.textContent = totalItems;
+                
+                // Show/hide based on if cart has items
+                if (totalItems > 0) {
+                    cartCountElement.classList.remove('d-none');
+                } else {
+                    cartCountElement.classList.add('d-none');
+                }
+            }
+        }
+
+        // Validate form inputs
+        function validateForm(step) {
+            switch (step) {
+                case 1:
+                    return validatePersonalInfo();
+                case 2:
+                    return validateAddress();
+                case 3:
+                    return validatePayment();
+                default:
+                    return true;
+            }
+        }
+
+        function validatePersonalInfo() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            
+            if (!firstName) {
+                showValidationError('firstName', 'First name is required');
+                return false;
+            }
+            
+            if (!lastName) {
+                showValidationError('lastName', 'Last name is required');
+                return false;
+            }
+            
+            if (!email || !isValidEmail(email)) {
+                showValidationError('email', 'Please enter a valid email address');
+                return false;
+            }
+            
+            if (!phone || !isValidPhone(phone)) {
+                showValidationError('phone', 'Please enter a valid phone number');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function validateAddress() {
+            const addressLine1 = document.getElementById('addressLine1').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const state = document.getElementById('state').value.trim();
+            const zipCode = document.getElementById('zipCode').value.trim();
+            
+            if (!addressLine1) {
+                showValidationError('addressLine1', 'Address is required');
+                return false;
+            }
+            
+            if (!city) {
+                showValidationError('city', 'City is required');
+                return false;
+            }
+            
+            if (!state) {
+                showValidationError('state', 'Please select a state');
+                return false;
+            }
+            
+            if (!zipCode || !isValidZipCode(zipCode)) {
+                showValidationError('zipCode', 'Please enter a valid ZIP code');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function validatePayment() {
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            
+            if (paymentMethod === 'creditCard' || paymentMethod === 'debitCard') {
+                const cardName = document.getElementById('cardName').value.trim();
+                const cardNumber = document.getElementById('cardNumber').value.trim();
+                const expiryDate = document.getElementById('expiryDate').value.trim();
+                const cvv = document.getElementById('cvv').value.trim();
+                
+                if (!cardName) {
+                    showValidationError('cardName', 'Name on card is required');
+                    return false;
+                }
+                
+                if (!cardNumber || !isValidCardNumber(cardNumber)) {
+                    showValidationError('cardNumber', 'Please enter a valid card number');
+                    return false;
+                }
+                
+                if (!expiryDate || !isValidExpiryDate(expiryDate)) {
+                    showValidationError('expiryDate', 'Please enter a valid expiry date (MM/YY)');
+                    return false;
+                }
+                
+                if (!cvv || !isValidCVV(cvv)) {
+                    showValidationError('cvv', 'Please enter a valid CVV');
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        // Helper validation functions
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function isValidPhone(phone) {
+            // Allow formats like: +91 9876543210, 9876543210, 098-7654-3210
+            const phoneRegex = /^(\+\d{1,3}\s?)?\d{10}$|^\d{3}[-\s]?\d{4}[-\s]?\d{3}$/;
+            return phoneRegex.test(phone);
+        }
+
+        function isValidZipCode(zipCode) {
+            // Indian PIN code format: 6 digits
+            const zipRegex = /^\d{6}$/;
+            return zipRegex.test(zipCode);
+        }
+
+        function isValidCardNumber(cardNumber) {
+            // Remove spaces and check if it's 16 digits
+            const sanitizedNumber = cardNumber.replace(/\s+/g, '');
+            return /^\d{16}$/.test(sanitizedNumber);
+        }
+
+        function isValidExpiryDate(expiryDate) {
+            // Format: MM/YY
+            const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+            return expiryRegex.test(expiryDate);
+        }
+
+        function isValidCVV(cvv) {
+            // 3 or 4 digits
+            const cvvRegex = /^\d{3,4}$/;
+            return cvvRegex.test(cvv);
+        }
+
+        function showValidationError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            field.classList.add('is-invalid');
+            
+            // Create error message if it doesn't exist
+            let errorDiv = field.nextElementSibling;
+            if (!errorDiv || !errorDiv.classList.contains('invalid-feedback')) {
+                errorDiv = document.createElement('div');
+                errorDiv.className = 'invalid-feedback';
+                field.parentNode.insertBefore(errorDiv, field.nextSibling);
+            }
+            
+            errorDiv.textContent = message;
+            
+            // Focus on the field
+            field.focus();
+            
+            // Remove error when field is changed
+            field.addEventListener('input', function() {
+                this.classList.remove('is-invalid');
+            }, { once: true });
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize cart if not exists
+            if (!localStorage.getItem('carCart')) {
+                localStorage.setItem('carCart', JSON.stringify([]));
+            }
+            
+            // Load cart from localStorage
+            cart = JSON.parse(localStorage.getItem('carCart')) || [];
+            
+            // Load cart items
+            loadCartItems();
+            
+            // Update cart count
+            updateCartCount();
+            
+            // Initialize tooltips and popovers
+            initTooltipsAndPopovers();
+        });
+        </script>
+    </body>
+</html>

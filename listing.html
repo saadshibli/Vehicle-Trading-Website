@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Listings</title>
+    <style>
+        .badge-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .card-img-top {
+            height: 180px;
+            object-fit: cover;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .button-group .btn {
+            flex: 1;
+            white-space: nowrap;
+        }
+          /* Ensure tab headings are always visible */
+        .nav-tabs .nav-link {
+            opacity: 1 !important;
+            color: #333 !important;
+        }
+        
+        /* Ensure content headings are always visible */
+        .tab-content h5 {
+            display: block !important;
+            opacity: 1 !important;
+        }
+
+        .toast-container {
+            z-index: 1080;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-car me-2"></i>CarTech
+            </a>
+            <button class="navbar-toggler" type="button" 
+                    data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about.html">About</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Listings</a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#" onclick="filterCars('all')">All Vehicles</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="filterCars('new')">New Vehicles</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="filterCars('used')">Used Vehicles</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="filterCars('ev')">Electric Vehicles</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sell.html">Sell Your Car</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact.html">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="/cart.html">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                            <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Toast Container -->
+<div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer"></div>
+
+    <!--Modal class-->
+    <div class="modal fade" id="detailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img id="detailImage" src="" class="img-fluid rounded" alt="Car Image">
+                            <div class="mt-3" id="detailBadges"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <nav>
+                                <div class="nav nav-tabs">
+                                    <button class="nav-link active" data-bs-toggle="tab" 
+                                        data-bs-target="#specsTab">Specifications</button>
+                                    <button class="nav-link" data-bs-toggle="tab" 
+                                        data-bs-target="#historyTab">History</button>
+                                    <button class="nav-link" data-bs-toggle="tab" 
+                                        data-bs-target="#featuresTab">Features</button>
+                                </div>
+                            </nav>
+                            
+                            <div class="tab-content mt-3">
+                                <div class="tab-pane fade" id="specsTab"></div>
+                                <div class="tab-pane fade" id="historyTab"></div>
+                                <div class="tab-pane fade" id="featuresTab"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Car Listings -->
+    <div class="container my-5">
+        <div class="row">
+            <!-- Car 1 -->
+            <div class="col-md-4 mb-4 car-card new ev" data-car-id="1">
+                <div class="card position-relative">
+                    <img src="/img/listing/l1.jpeg" class="card-img-top" alt="Tesla Model 3">
+                    <div class="badge-container">
+                        <span class="badge bg-danger">Certified</span>
+                        <span class="badge bg-primary">New</span>
+                        <span class="badge bg-success">EV</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Tesla Model 3 <span class="text-primary">₹37.35 Lakh</span></h5>
+                        <p>Year: 2024 | Mileage: 0 mi</p>
+                        <p>Transmission: Automatic | Fuel: Electric</p>
+                        <p><i class="fas fa-star text-warning"></i> 4.8 | Mumbai, Maharashtra</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary"><i class="fas fa-phone"></i></button>
+                            <button class="btn btn-outline-warning"><i class="fas fa-envelope"></i></button>
+                            <button class="btn btn-secondary detail-btn"><i class="fa-solid fa-circle-info"></i></button>
+                            <button class="btn btn-success">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car 2 -->
+            <div class="col-md-4 mb-4 car-card new" data-car-id="2">
+                <div class="card position-relative">
+                    <img src="/img/listing/l2.jpeg" class="card-img-top" alt="Tesla Model 3">
+                    <div class="badge-container">
+                        <span class="badge bg-danger">Certified</span>
+                        <span class="badge bg-primary">New</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Mercedes C-Class <span class="text-primary">₹45.65 Lakh</span></h5>
+                        <p>Year: 2024 | Mileage: 0 mi</p>
+                        <p>Transmission: Automatic | Fuel: Petrol</p>
+                        <p><i class="fas fa-star text-warning"></i> 4.7 | Delhi, NCR</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary"><i class="fas fa-phone"></i></button>
+                            <button class="btn btn-outline-warning"><i class="fas fa-envelope"></i></button>
+                            <button class="btn btn-secondary detail-btn"><i class="fa-solid fa-circle-info"></i></button>
+                            <button class="btn btn-success">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car 3 -->
+            <div class="col-md-4 mb-4 car-card used ev" data-car-id="3">
+                <div class="card position-relative">
+                    <img src="/img/listing/l3.jpeg" class="card-img-top" alt="Tesla Model 3">
+                    <div class="badge-container">
+                        <span class="badge bg-danger">Certified</span>
+                        <span class="badge bg-warning">Used</span>
+                        <span class="badge bg-success">EV</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Nissan Leaf <span class="text-primary">₹20.75 Lakh</span></h5>
+                        <p>Year: 2021 | Mileage: 15,000 mi</p>
+                        <p>Transmission: Automatic | Fuel: Electric</p>
+                        <p><i class="fas fa-star text-warning"></i> 4.6 | Bengaluru, Karnataka</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary"><i class="fas fa-phone"></i></button>
+                            <button class="btn btn-outline-warning"><i class="fas fa-envelope"></i></button>
+                            <button class="btn btn-secondary detail-btn"><i class="fa-solid fa-circle-info"></i></button>
+                            <button class="btn btn-success">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car 4 -->
+            <div class="col-md-4 mb-4 car-card used" data-car-id="4">
+                <div class="card position-relative">
+                    <img src="/img/listing/l4.jpeg" class="card-img-top" alt="Tesla Model 3">
+                    <div class="badge-container">
+                        <span class="badge bg-warning">Used</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Honda Civic <span class="text-primary">₹14.94 Lakh</span></h5>
+                        <p>Year: 2019 | Mileage: 35,000 mi</p>
+                        <p>Transmission: Manual | Fuel: Petrol</p>
+                        <p><i class="fas fa-star text-warning"></i> 4.5 | Chennai, Tamil Nadu</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary"><i class="fas fa-phone"></i></button>
+                            <button class="btn btn-outline-warning"><i class="fas fa-envelope"></i></button>
+                            <button class="btn btn-secondary detail-btn"><i class="fa-solid fa-circle-info"></i></button>
+                            <button class="btn btn-success">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car 5 -->
+            <div class="col-md-4 mb-4 car-card new ev" data-car-id="5">
+                <div class="card position-relative">
+                    <img src="/img/listing/l5.jpeg" class="card-img-top" alt="Tesla Model 3">
+                    <div class="badge-container">
+                        <span class="badge bg-danger">Certified</span>
+                        <span class="badge bg-primary">New</span>
+                        <span class="badge bg-success">EV</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Ford Mustang <span class="text-primary">₹39.84 Lakh</span></h5>
+                        <p>Year: 2024 | Mileage: 0 mi</p>
+                        <p>Transmission: Automatic | Fuel: Electric</p>
+                        <p><i class="fas fa-star text-warning"></i> 4.7 | Hyderabad, Telangana</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary"><i class="fas fa-phone"></i></button>
+                            <button class="btn btn-outline-warning"><i class="fas fa-envelope"></i></button>
+                            <button class="btn btn-secondary detail-btn"><i class="fa-solid fa-circle-info"></i></button>
+                            <button class="btn btn-success">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car 6 -->
+            <div class="col-md-4 mb-4 car-card used" data-car-id="6">
+                <div class="card position-relative">
+                    <img src="/img/listing/l6.jpeg" class="card-img-top" alt="Tesla Model 3">
+                    <div class="badge-container">
+                        <span class="badge bg-danger">Certified</span>
+                        <span class="badge bg-warning">Used</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Toyota Camry <span class="text-primary">₹18.68 Lakh</span></h5>
+                        <p>Year: 2020 | Mileage: 28,000 mi</p>
+                        <p>Transmission: Automatic | Fuel: Hybrid</p>
+                        <p><i class="fas fa-star text-warning"></i> 4.6 | Kolkata, West Bengal</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary"><i class="fas fa-phone"></i></button>
+                            <button class="btn btn-outline-warning"><i class="fas fa-envelope"></i></button>
+                            <button class="btn btn-secondary detail-btn"><i class="fa-solid fa-circle-info"></i></button>
+                            <button class="btn btn-success">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car 7 -->
+            <div class="col-md-4 mb-4 car-card new" data-car-id="7">
+                <div class="card position-relative">
+                    <img src="/img/listing/l7.jpeg" class="card-img-top" alt="Tesla Model 3">
+                    <div class="badge-container">
+                        <span class="badge bg-danger">Certified</span>
+                        <span class="badge bg-primary">New</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Audi Q5 <span class="text-primary">₹43.16 Lakh</span></h5>
+                        <p>Year: 2024 | Mileage: 0 mi</p>
+                        <p>Transmission: Automatic | Fuel: Petrol</p>
+                        <p><i class="fas fa-star text-warning"></i> 4.8 | Pune, Maharashtra</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary"><i class="fas fa-phone"></i></button>
+                            <button class="btn btn-outline-warning"><i class="fas fa-envelope"></i></button>
+                            <button class="btn btn-secondary detail-btn"><i class="fa-solid fa-circle-info"></i></button>
+                            <button class="btn btn-success">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car 8 -->
+            <div class="col-md-4 mb-4 car-card used ev" data-car-id="8">
+                <div class="card position-relative">
+                    <img src="/img/listing/l8.jpeg" class="card-img-top" alt="Tesla Model 3">
+                    <div class="badge-container">
+                        <span class="badge bg-warning">Used</span>
+                        <span class="badge bg-success">EV</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Chevrolet Bolt <span class="text-primary">₹16.60 Lakh</span></h5>
+                        <p>Year: 2022 | Mileage: 12,000 mi</p>
+                        <p>Transmission: Automatic | Fuel: Electric</p>
+                        <p><i class="fas fa-star text-warning"></i> 4.4 | Ahmedabad, Gujarat</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary"><i class="fas fa-phone"></i></button>
+                            <button class="btn btn-outline-warning"><i class="fas fa-envelope"></i></button>
+                            <button class="btn btn-secondary detail-btn"><i class="fa-solid fa-circle-info"></i></button>
+                            <button class="btn btn-success">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car 9 -->
+            <div class="col-md-4 mb-4 car-card used ev" data-car-id="9">
+                <div class="card position-relative">
+                    <img src="/img/listing/l9.jpeg" class="card-img-top" alt="Tesla Model 3">
+                    <div class="badge-container">
+                        <span class="badge bg-danger">Certified</span>
+                        <span class="badge bg-warning">Used</span>
+                        <span class="badge bg-success">EV</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Chevrolet Bolt EV <span class="text-primary">₹18.92 Lakh</span></h5>
+                        <p>Year: 2022 | Mileage: 18,400 mi</p>
+                        <p>Transmission: Automatic | Fuel: Electric</p>
+                        <p><i class="fas fa-star text-warning"></i> 4.5 | Jaipur, Rajasthan</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary"><i class="fas fa-phone"></i></button>
+                            <button class="btn btn-outline-warning"><i class="fas fa-envelope"></i></button>
+                            <button class="btn btn-secondary detail-btn"><i class="fa-solid fa-circle-info"></i></button>
+                            <button class="btn btn-success">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car 10 -->
+            <div class="col-md-4 mb-4 car-card new" data-car-id="10">
+                <div class="card position-relative">
+                    <img src="/img/listing/l10.jpeg" class="card-img-top" alt="Tesla Model 3">
+                    <div class="badge-container">
+                        <span class="badge bg-danger">Certified</span>
+                        <span class="badge bg-primary">New</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Toyota RAV4 Hybrid <span class="text-primary">₹28.64 Lakh</span></h5>
+                        <p>Year: 2024 | Mileage: 0 mi</p>
+                        <p>Transmission: CVT | Fuel: Hybrid</p>
+                        <p><i class="fas fa-star text-warning"></i> 4.7 | Kochi, Kerala</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary"><i class="fas fa-phone"></i></button>
+                            <button class="btn btn-outline-warning"><i class="fas fa-envelope"></i></button>
+                            <button class="btn btn-secondary detail-btn"><i class="fa-solid fa-circle-info"></i></button>
+                            <button class="btn btn-success">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car 11 -->
+            <div class="col-md-4 mb-4 car-card used" data-car-id="11">
+                <div class="card position-relative">
+                    <img src="/img/listing/l11.jpeg" class="card-img-top" alt="Tesla Model 3">
+                    <div class="badge-container">
+                        <span class="badge bg-danger">Certified</span>
+                        <span class="badge bg-warning">Used</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">BMW 530i <span class="text-primary">₹34.20 Lakh</span></h5>
+                        <p>Year: 2021 | Mileage: 27,500 mi</p>
+                        <p>Transmission: Automatic | Fuel: Petrol</p>
+                        <p><i class="fas fa-star text-warning"></i> 4.6 | Chandigarh, Punjab</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary"><i class="fas fa-phone"></i></button>
+                            <button class="btn btn-outline-warning"><i class="fas fa-envelope"></i></button>
+                            <button class="btn btn-secondary detail-btn"><i class="fa-solid fa-circle-info"></i></button>
+                            <button class="btn btn-success">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car 12 -->
+            <div class="col-md-4 mb-4 car-card new ev" data-car-id="12">
+                <div class="card position-relative">
+                    <img src="/img/listing/l12.jpeg" class="card-img-top" alt="Tesla Model 3">
+                    <div class="badge-container">
+                        <span class="badge bg-danger">Certified</span>
+                        <span class="badge bg-primary">New</span>
+                        <span class="badge bg-success">EV</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Rivian R1T <span class="text-primary">₹64.74 Lakh</span></h5>
+                        <p>Year: 2024 | Mileage: 0 mi</p>
+                        <p>Transmission: Automatic | Fuel: Electric</p>
+                        <p><i class="fas fa-star text-warning"></i> 4.9 | Lucknow, Uttar Pradesh</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary"><i class="fas fa-phone"></i></button>
+                            <button class="btn btn-outline-warning"><i class="fas fa-envelope"></i></button>
+                            <button class="btn btn-secondary detail-btn"><i class="fa-solid fa-circle-info"></i></button>
+                            <button class="btn btn-success">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- pagination -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <nav aria-label="Vehicle Pagination">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>CarTech</h5>
+                    <p>"Your gateway to stress-free automotive transactions"</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/about.html" class="text-white">About Us</a></li>
+                        <li><a href="/sell.html" class="text-white">Services</a></li>
+                        <li><a href="/contact.html" class="text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect With Us</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="cart.js"></script>
+    <script>
+        function filterCars(category) {
+            const cards = document.querySelectorAll('.car-card');
+            cards.forEach(card => {
+                const showCard = category === 'all' || 
+                                (category === 'ev' && card.classList.contains('ev')) || 
+                                (category === 'new' && card.classList.contains('new')) || 
+                                (category === 'used' && card.classList.contains('used'));
+                
+                card.style.display = showCard ? 'block' : 'none';
+            });
+        }
+
+        // Car details data
+        const carDetails = {
+            1: {
+                specs: {
+                    "Acceleration": "0-60 mph in 3.1s",
+                    "Range": "358 miles",
+                    "Charging": "250 kW max",
+                    "Seats": "5",
+                    "Drive Type": "All-Wheel Drive"
+                },
+                history: {
+                    "Accident History": "None",
+                    "Service Records": "Full history",
+                    "Ownership": "First owner"
+                },
+                features: [
+                    "Autopilot", 
+                    "Premium Interior", 
+                    "Panoramic Roof",
+                    "Wireless Charging",
+                    "Smart Summon"
+                ]
+            },
+            2: {
+                specs: {
+                    "Engine": "2.0L Turbo I4",
+                    "Horsepower": "255 hp",
+                    "Transmission": "9-Speed Automatic",
+                    "Fuel Economy": "25 mpg city/35 mpg highway",
+                    "Drive Type": "Rear-Wheel Drive"
+                },
+                history: {
+                    "Accident History": "None",
+                    "Service Records": "Full dealer maintenance",
+                    "Ownership": "Showroom demo vehicle"
+                },
+                features: [
+                    "MBUX Infotainment",
+                    "Premium Package",
+                    "Ambient Lighting",
+                    "Driver Assistance Package"
+                ]
+            },
+            3: {
+                specs: {
+                    "Range": "150 miles",
+                    "Charging": "50 kW DC Fast Charging",
+                    "Battery Capacity": "40 kWh",
+                    "Seats": "5",
+                    "Drive Type": "Front-Wheel Drive"
+                },
+                history: {
+                    "Accident History": "Minor bumper repair",
+                    "Service Records": "Annual battery checks",
+                    "Ownership": "2 previous owners"
+                },
+                features: [
+                    "e-Pedal Technology",
+                    "ProPILOT Assist",
+                    "Apple CarPlay",
+                    "Battery Heating System"
+                ]
+            },
+            4: {
+                specs: {
+                    "Engine": "1.5L Turbo I4",
+                    "Horsepower": "174 hp",
+                    "Transmission": "6-Speed Manual",
+                    "Fuel Economy": "30 mpg city/38 mpg highway",
+                    "Drive Type": "Front-Wheel Drive"
+                },
+                history: {
+                    "Accident History": "None",
+                    "Service Records": "Regular oil changes",
+                    "Ownership": "Single owner"
+                },
+                features: [
+                    "Honda Sensing Suite",
+                    "LED Headlights",
+                    "Dual-Zone Climate Control",
+                    "7-Inch Display Audio"
+                ]
+            },
+            5: {
+                specs: {
+                    "Acceleration": "0-60 mph in 3.5s",
+                    "Range": "300 miles",
+                    "Battery Capacity": "88 kWh",
+                    "Drive Type": "All-Wheel Drive",
+                    "Max Power": "480 hp"
+                },
+                history: {
+                    "Accident History": "None",
+                    "Service Records": "Factory fresh",
+                    "Ownership": "Brand new"
+                },
+                features: [
+                    "MagneRide Suspension",
+                    "B&O Sound System",
+                    "Active Valve Exhaust",
+                    "Recaro Seats"
+                ]
+            },
+            6: {
+                specs: {
+                    "Engine": "2.5L Hybrid",
+                    "Combined Power": "208 hp",
+                    "Fuel Economy": "51 mpg city/53 mpg highway",
+                    "Drive Type": "Front-Wheel Drive",
+                    "EV Mode Range": "1.3 miles"
+                },
+                history: {
+                    "Accident History": "Minor door ding",
+                    "Service Records": "Hybrid battery check",
+                    "Ownership": "2 previous owners"
+                },
+                features: [
+                    "Toyota Safety Sense",
+                    "Smart Key System",
+                    "Qi Wireless Charging",
+                    "Bird's Eye View Camera"
+                ]
+            },
+            7: {
+                specs: {
+                    "Engine": "2.0L Turbo I4",
+                    "Horsepower": "261 hp",
+                    "Transmission": "7-Speed S tronic",
+                    "Quattro All-Wheel Drive": "Standard",
+                    "Fuel Economy": "23 mpg city/27 mpg highway"
+                },
+                history: {
+                    "Accident History": "None",
+                    "Service Records": "Dealer maintained",
+                    "Ownership": "Executive demo"
+                },
+                features: [
+                    "Virtual Cockpit",
+                    "MMI Touch Response",
+                    "Audi Pre Sense",
+                    "Panoramic Sunroof"
+                ]
+            },
+            8: {
+                specs: {
+                    "Range": "259 miles",
+                    "Battery Capacity": "66 kWh",
+                    "Charging": "55 kW DC Fast Charging",
+                    "Drive Type": "Front-Wheel Drive",
+                    "Horsepower": "200 hp"
+                },
+                history: {
+                    "Accident History": "None",
+                    "Service Records": "Battery warranty active",
+                    "Ownership": "Single owner"
+                },
+                features: [
+                    "10.2-Inch Infotainment",
+                    "Regen on Demand",
+                    "4G LTE Wi-Fi",
+                    "Heated Steering Wheel"
+                ]
+            },
+            9: {
+                specs: {
+                    "Range": "247 miles",
+                    "Battery Capacity": "65 kWh",
+                    "Charging": "50 kW DC Fast Charging",
+                    "Drive Type": "Front-Wheel Drive",
+                    "Cargo Space": "16.6 cu ft"
+                },
+                history: {
+                    "Accident History": "Minor curb rash",
+                    "Service Records": "Tire rotations",
+                    "Ownership": "Lease return"
+                },
+                features: [
+                    "DC Fast Charging",
+                    "Energy Assistant App",
+                    "Rear Camera Mirror",
+                    "Adaptive Cruise Control"
+                ]
+            },
+            10: {
+                specs: {
+                    "Engine": "2.5L Hybrid AWD",
+                    "Combined Power": "219 hp",
+                    "Fuel Economy": "41 mpg city/38 mpg highway",
+                    "EV Mode Range": "0.6 miles",
+                    "Drive Type": "All-Wheel Drive"
+                },
+                history: {
+                    "Accident History": "None",
+                    "Service Records": "Pre-delivery inspection",
+                    "Ownership": "Brand new"
+                },
+                features: [
+                    "Toyota Hybrid System",
+                    "SofTex Seats",
+                    "Power Liftgate",
+                    "Digital Rearview Mirror"
+                ]
+            },
+            11: {
+                specs: {
+                    "Engine": "2.0L Turbo I4",
+                    "Horsepower": "248 hp",
+                    "Transmission": "8-Speed Automatic",
+                    "Fuel Economy": "25 mpg city/33 mpg highway",
+                    "Drive Type": "Rear-Wheel Drive"
+                },
+                history: {
+                    "Accident History": "None",
+                    "Service Records": "BMW certified",
+                    "Ownership": "Single owner"
+                },
+                features: [
+                    "Live Cockpit Professional",
+                    "Harman Kardon Audio",
+                    "Gesture Control",
+                    "Parking Assistant"
+                ]
+            },
+            12: {
+                specs: {
+                    "Range": "400 miles",
+                    "Battery Capacity": "135 kWh",
+                    "Towing Capacity": "11,000 lbs",
+                    "Drive Type": "Quad-Motor AWD",
+                    "Horsepower": "835 hp"
+                },
+                history: {
+                    "Accident History": "None",
+                    "Service Records": "Factory new",
+                    "Ownership": "Direct from showroom"
+                },
+                features: [
+                    "Air Suspension",
+                    "Gear Tunnel Storage",
+                    "Driver+ Assist",
+                    "Camp Speaker System"
+                ]
+            }
+        };
+
+        // Event delegation for detail buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.detail-btn')) {
+                const card = e.target.closest('.car-card');
+                const carId = card.dataset.carId;
+                showDetails(carId);
+            }
+        });
+
+        function showDetails(carId) {
+            const detail = carDetails[carId];
+            if (!detail) return;
+
+            const card = document.querySelector(`[data-car-id="${carId}"]`);
+            
+            // Update modal content
+            document.getElementById('detailTitle').textContent = card.querySelector('.card-title').textContent;
+            document.getElementById('detailImage').src = card.querySelector('img').src;
+            
+            // Badges
+            const badges = card.querySelectorAll('.badge');
+            document.getElementById('detailBadges').innerHTML = 
+                Array.from(badges).map(b => b.outerHTML).join('');
+
+            // Specifications
+            document.getElementById('specsTab').innerHTML = 
+                Object.entries(detail.specs).map(([k,v]) => `
+                    <p><strong>${k}:</strong> ${v}</p>
+                `).join('');
+
+            // History
+            document.getElementById('historyTab').innerHTML = 
+                Object.entries(detail.history).map(([k,v]) => `
+                    <p><strong>${k}:</strong> ${v}</p>
+                `).join('');
+
+            // Features
+            document.getElementById('featuresTab').innerHTML = `
+                <ul>${detail.features.map(f => `<li>${f}</li>`).join('')}</ul>
+            `;
+
+            // Showing in modal
+            const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+            modal.show();
+        }
+
+        // Lazy load images
+    document.addEventListener("DOMContentLoaded", function() {
+        const lazyImages = [].slice.call(document.querySelectorAll("img.card-img-top"));
+        
+        if ("IntersectionObserver" in window) {
+            const lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        const lazyImage = entry.target;
+                        lazyImage.src = lazyImage.dataset.src || lazyImage.src;
+                        lazyImageObserver.unobserve(lazyImage);
+                    }
+                });
+            });
+            
+            lazyImages.forEach(function(lazyImage) {
+                if (!lazyImage.dataset.src) {
+                    lazyImage.dataset.src = lazyImage.src;
+                }
+                lazyImageObserver.observe(lazyImage);
+            });
+        }
+    });
+    </script>
+</body>
+</html>

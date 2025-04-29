@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Your Car - CarTech</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.6)), 
+                        url('/api/placeholder/1920/600');
+            background-size: cover;
+            background-position: center;
+            padding: 120px 0;
+            color: white;
+        }
+        
+        /* Process Cards */
+        .process-card {
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .process-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            color: #0d6efd;
+            margin-bottom: 1rem;
+        }
+        
+        /* Form Sections */
+        .form-section {
+            background: #f8f9fa;
+        }
+        
+        .form-card {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: white;
+        }
+        
+        .form-header {
+            background: #0d6efd;
+            color: white;
+            border-radius: 15px 15px 0 0;
+            padding: 20px;
+        }
+        
+        /* License Plate Input */
+        .license-plate {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            letter-spacing: 2px;
+            font-size: 1.2rem;
+        }
+        
+        .plate-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .plate-verification-box {
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 25px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            border-color: #0d6efd;
+            background: #e9ecef;
+        }
+        
+        .upload-area input[type="file"] {
+            display: none;
+        }
+        
+        /* Image Preview */
+        #imagePreviewContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .preview-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        /* Analysis Result */
+        .analysis-result {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .analysis-header {
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .damage-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .damage-severity {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .severity-low {
+            background: rgba(25, 135, 84, 0.2);
+            color: #198754;
+        }
+        
+        .severity-medium {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+        
+        .severity-high {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+        
+        /* Features Section */
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: #e9ecef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: #0d6efd;
+            font-size: 1.5rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: #212529;
+            color: white;
+            padding: 40px 0;
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        /* Validation Loader */
+        .validation-loader {
+            display: none;
+        }
+        
+        /* Car Details Form */
+        #carDetailsForm {
+            display: none;
+        }
+        
+        /* Car Information (displays after plate verification) */
+        .car-info-container {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0d6efd;
+        }
+        
+        .car-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-car me-2"></i>CarTech
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/home.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Listings</a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/listing.html" onclick="filterCars('all')">All Vehicles</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/listing.html" onclick="filterCars('new')">New Vehicles</a></li>
+                            <li><a class="dropdown-item" href="/listing.html" onclick="filterCars('used')">Used Vehicles</a></li>
+                            <li><a class="dropdown-item" href="/listing.html" onclick="filterCars('ev')">Electric Vehicles</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link active" href="/sell.html">Sell Your Car</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link active position-relative" href="/cart.html">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                            <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner-grow text-primary mb-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <h4 class="text-white">Analyzing Your Car...</h4>
+        <p class="text-white">Using AI to detect model, condition, and estimated value</p>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-4">Sell Your Car</h1>
+            <p class="lead mb-5">Just enter your license plate to get started with our AI-powered valuation</p>
+            <a href="#license-plate" class="btn btn-primary btn-lg px-5">Enter License Plate</a>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="py-5" id="sell-process">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Sell Your Car In Four Simple Steps</h2>
+                <p class="text-muted">Our AI-powered process makes selling your car quick and easy</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="process-card p-4 text-center">
+                        <div class="card-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <h4>1. Enter License Plate</h4>
+                        <p class="text-muted">We'll verify registration and pre-fill details from your plate number</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="process-card p-4 text-center">
+                        <div class="card-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <h4>2. Upload Photos</h4>
+                        <p class="text-muted">Provide a few photos of your vehicle for AI analysis</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="process-card p-4 text-center">
+                        <div class="card-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h4>3. Get AI Valuation</h4>
+                        <p class="text-muted">Our AI instantly analyzes your car and provides a competitive offer</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="process-card p-4 text-center">
+                        <div class="card-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h4>4. Get Paid</h4>
+                        <p class="text-muted">Schedule pickup and receive payment after verification</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- License Plate Verification Section -->
+    <section class="py-5 bg-light" id="license-plate">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Enter Your License Plate</h2>
+                <p class="text-muted">We'll verify your registration and pre-fill your vehicle details</p>
+            </div>
+            
+            <div class="plate-container">
+                <div class="plate-verification-box">
+                    <form id="plateVerificationForm">
+                        <div class="mb-4">
+                            <label for="licensePlate" class="form-label">License Plate Number</label>
+                            <input type="text" class="form-control license-plate" id="licensePlate" placeholder="MH01AB1234" maxlength="10" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="plateState" class="form-label">State/Union Territory</label>
+                            <select class="form-select" id="plateState" required>
+                                <option value="">Select state/union territory</option>
+                                <option value="MH">Maharashtra</option>
+                                <option value="DL">Delhi</option>
+                                <option value="KA">Karnataka</option>
+                                <option value="TN">Tamil Nadu</option>
+                                <option value="GJ">Gujarat</option>
+                                <option value="UP">Uttar Pradesh</option>
+                                <option value="RJ">Rajasthan</option>
+                                <option value="WB">West Bengal</option>
+                                <option value="TS">Telangana</option>
+                                <option value="AP">Andhra Pradesh</option>
+                                <option value="KL">Kerala</option>
+                                <option value="HR">Haryana</option>
+                                <option value="MP">Madhya Pradesh</option>
+                                <option value="PB">Punjab</option>
+                                <option value="BR">Bihar</option>
+                                <option value="OR">Odisha</option>
+                                <option value="CH">Chandigarh</option>
+                                <option value="JK">Jammu & Kashmir</option>
+                                <option value="AS">Assam</option>
+                                <option value="JH">Jharkhand</option>
+                                <option value="UK">Uttarakhand</option>
+                                <option value="HP">Himachal Pradesh</option>
+                                <option value="GA">Goa</option>
+                                <option value="PY">Puducherry</option>
+                                <option value="CT">Chhattisgarh</option>
+                                <option value="SK">Sikkim</option>
+                                <option value="ML">Meghalaya</option>
+                                <option value="MN">Manipur</option>
+                                <option value="TR">Tripura</option>
+                                <option value="AR">Arunachal Pradesh</option>
+                                <option value="NL">Nagaland</option>
+                                <option value="MZ">Mizoram</option>
+                                <option value="AN">Andaman & Nicobar</option>
+                                <option value="DD">Daman & Diu</option>
+                                <option value="DN">Dadra & Nagar Haveli</option>
+                                <option value="LD">Lakshadweep</option>
+                            </select>
+                        </div>
+                        
+                        <div class="validation-loader text-center mb-3" id="validationLoader">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Verifying license plate...</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="ownerConfirmation" required>
+                                <label class="form-check-label" for="ownerConfirmation">
+                                    I confirm I am the registered owner of this vehicle
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary w-100" title="verify license plate" onclick="verifyLicensePlate()">Verify Plate & Continue</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Car Details Form Section -->
+    <section class="form-section py-5" id="car-form">
+        <div class="container">
+            <div class="form-card overflow-hidden" id="carDetailsForm">
+                <div class="form-header text-center">
+                    <h2 class="fw-bold mb-0">Complete Your Car Details</h2>
+                    <p class="mb-0">We've verified your license plate and pre-filled what we know</p>
+                </div>
+                
+                <div class="p-4 p-md-5">
+                    <!-- Vehicle Information Summary -->
+                    <div class="car-info-container mb-4">
+                        <div class="car-info-header">
+                            <h5 class="mb-0">Verified Vehicle Information</h5>
+                            <span class="badge bg-success">Verified</span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>License Plate:</strong> <span id="summaryPlate">ABC 1234</span></p>
+                                <p class="mb-1"><strong>Make:</strong> <span id="summaryMake">Toyota</span></p>
+                                <p class="mb-0"><strong>Model:</strong> <span id="summaryModel">Camry</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>Year:</strong> <span id="summaryYear">2019</span></p>
+                                <p class="mb-1"><strong>Color:</strong> <span id="summaryColor">Silver</span></p>
+                                <p class="mb-0"><strong>VIN:</strong> <span id="summaryVin">4T1BF1FK5CU******</span></p>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <form id="carSellForm">
+                        <div class="row mb-4">
+                            <div class="col-12 mb-4">
+                                <h4>Additional Vehicle Details</h4>
+                                <p class="text-muted">Please provide some additional information about your car</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="carMileage" class="form-label">Current Mileage (km)</label>
+                                <input type="number" class="form-control" id="carMileage" placeholder="e.g. 50000" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="carCondition" class="form-label">Overall Condition</label>
+                                <select class="form-select" id="carCondition" required>
+                                    <option value="">Select condition</option>
+                                    <option>Excellent - Like new</option>
+                                    <option>Good - Minor wear</option>
+                                    <option>Fair - Noticeable wear</option>
+                                    <option>Poor - Significant issues</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="transmissionType" class="form-label">Transmission</label>
+                                <select class="form-select" id="transmissionType">
+                                    <option value="">Select transmission</option>
+                                    <option>Automatic</option>
+                                    <option>Manual</option>
+                                    <option>CVT</option>
+                                    <option>Semi-Automatic</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="fuelType" class="form-label">Fuel Type</label>
+                                <select class="form-select" id="fuelType">
+                                    <option value="">Select fuel type</option>
+                                    <option>Gasoline</option>
+                                    <option>Diesel</option>
+                                    <option>Hybrid</option>
+                                    <option>Electric</option>
+                                    <option>Plug-in Hybrid</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="vehicleDescription" class="form-label">Additional Details (optional)</label>
+                                <textarea class="form-control" id="vehicleDescription" rows="3" placeholder="Any other details about your car (e.g., modifications, recent repairs, etc.)"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-12 mb-4">
+                                <h4>Vehicle Photos</h4>
+                                <p class="text-muted">Upload clear photos of your car for AI analysis (exterior and interior)</p>
+                            </div>
+                            <div class="col-12">
+                                <div class="upload-area">
+                                    <label for="carPhotos">
+                                        <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                                        <h5>Drop photos here or click to upload</h5>
+                                        <p class="text-muted">Upload at least 4 photos: front, back, sides, and interior</p>
+                                    </label>
+                                    <input type="file" 
+                                        id="carPhotos" 
+                                        accept="image/*" 
+                                        multiple 
+                                        onchange="handleFileUpload(this.files)"
+                                        required>
+                                </div>
+                                <div id="imagePreviewContainer" class="mt-3"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Result (hidden initially) -->
+                        <div class="analysis-result" id="analysisResult">
+                            <div class="analysis-header">
+                                <h4 class="mb-0"><i class="fas fa-robot me-2"></i>AI Valuation Results</h4>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-4 mb-md-0">
+                                    <div class="p-3 border rounded bg-light">
+                                        <h5>Estimated Market Value</h5>
+                                        <h2 class="text-primary mb-0" id="estimatedValue">$16,350</h2>
+                                        <small class="text-muted">Range: <span id="minValue">$15,500</span> - <span id="maxValue">$17,200</span></small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="p-3 border rounded bg-light">
+                                        <h5>Overall Condition</h5>
+                                        <div class="progress mb-2" style="height: 10px;">
+                                            <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <small>Poor</small>
+                                            <small>Average</small>
+                                            <small>Excellent</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h5 class="mb-3">Detected Issues</h5>
+                            <div id="detectedIssues">
+                                <!-- Issues will be populated by JavaScript -->
+                            </div>
+                            
+                            <div class="alert alert-info mt-4">
+                                <i class="fas fa-info-circle me-2"></i>
+                                This is an AI-based assessment. Our team will conduct a final inspection during pickup to confirm the valuation.
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4 mt-4">
+                            <div class="col-12 mb-4">
+                                <h4>Contact & Pickup Details</h4>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="fullName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="fullName" placeholder="Your full name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="phoneNumber" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phoneNumber" placeholder="Your contact number" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="emailAddress" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="emailAddress" placeholder="Your email" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="pickupDate" class="form-label">Preferred Pickup Date</label>
+                                <input type="date" class="form-control" id="pickupDate" min="2025-04-18" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="pickupTime" class="form-label">Preferred Time</label>
+                                <select class="form-select" id="pickupTime" required>
+                                    <option value="">Select time</option>
+                                    <option>Morning (9AM - 12PM)</option>
+                                    <option>Afternoon (12PM - 3PM)</option>
+                                    <option>Evening (3PM - 6PM)</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="doorstepPickup">
+                                    <label class="form-check-label" for="doorstepPickup">
+                                        I prefer doorstep pickup service (free)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" id="getOfferBtn" class="btn btn-primary btn-lg w-100" onclick="analyzeImages()">
+                                    <i class="fas fa-calculator me-2"></i>Calculate My Car's Value
+                                </button>
+                                
+                                <button type="submit" id="continueButtonContainer" class="btn btn-success btn-lg w-100 mt-3" style="display: none;">
+                                    <i class="fas fa-check-circle me-2"></i>Accept Valuation & Continue
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>CarTech</h5>
+                    <p>"Your gateway to stress-free automotive transactions"</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">About Us</a></li>
+                        <li><a href="#" class="text-white">Services</a></li>
+                        <li><a href="#" class="text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect With Us</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Predefined list of valid license plates with vehicle details
+        const validLicensePlates = {
+            "MH01AB1234": {
+                state: "MH",
+                make: "Maruti Suzuki",
+                model: "Swift",
+                year: "2019",
+                color: "White",
+                vin: "MADN1234ABCD56789"
+            },
+            "KA02XY5678": {
+                state: "KA",
+                make: "Hyundai",
+                model: "Creta",
+                year: "2020",
+                color: "Silver",
+                vin: "MDHYE5678EFGH1234"
+            },
+            "DL03CD9012": {
+                state: "DL",
+                make: "Tata",
+                model: "Nexon",
+                year: "2018",
+                color: "Blue",
+                vin: "TDNEX9012IJKL5678"
+            },
+            "TN04GH3456": {
+                state: "TN",
+                make: "Mahindra",
+                model: "XUV700",
+                year: "2021",
+                color: "Red",
+                vin: "MDXUV3456MNOP9012"
+            },
+            "GJ05JK7890": {
+                state: "GJ",
+                make: "Toyota",
+                model: "Fortuner",
+                year: "2017",
+                color: "Black",
+                vin: "TDFOR7890QRST3456"
+            }
+        };
+
+        // License plate verification function
+        function verifyLicensePlate() {
+            const licensePlateInput = document.getElementById('licensePlate').value.toUpperCase().replace(/\s/g, '');
+            const plateState = document.getElementById('plateState').value;
+            const ownerConfirmation = document.getElementById('ownerConfirmation').checked;
+            const validationLoader = document.getElementById('validationLoader');
+            
+            // Basic validation
+            if (!licensePlateInput || !plateState || !ownerConfirmation) {
+                alert('Please fill in all fields and confirm you are the owner.');
+                return;
+            }
+            
+            // Show loader
+            validationLoader.style.display = 'block';
+            
+            // Simulate server processing time
+            setTimeout(() => {
+                // Hide loader
+                validationLoader.style.display = 'none';
+                
+                // Check if license plate exists in our predefined list
+                if (validLicensePlates.hasOwnProperty(licensePlateInput)) {
+                    const vehicleData = validLicensePlates[licensePlateInput];
+                    
+                    // Check if state matches
+                    if (vehicleData.state === plateState) {
+                        // Show car details form and scroll to it
+                        document.getElementById('carDetailsForm').style.display = 'block';
+                        
+                        // Update summary info based on found data
+                        document.getElementById('summaryPlate').textContent = licensePlateInput;
+                        document.getElementById('summaryMake').textContent = vehicleData.make;
+                        document.getElementById('summaryModel').textContent = vehicleData.model;
+                        document.getElementById('summaryYear').textContent = vehicleData.year;
+                        document.getElementById('summaryColor').textContent = vehicleData.color;
+                        document.getElementById('summaryVin').textContent = vehicleData.vin;
+                        
+                        // Scroll to form
+                        document.getElementById('car-form').scrollIntoView({behavior: 'smooth'});
+                    } else {
+                        // State mismatch error
+                        alert(`This plate number is registered in ${getStateFullName(vehicleData.state)}, not ${getStateFullName(plateState)}. Please check your information.`);
+                    }
+                } else {
+                    // License plate not found
+                    alert('License plate not found in our system. Please verify the license plate number or contact support.');
+                }
+            }, 1500); // Simulate 1.5-second processing time
+        }
+
+        // Get full state name from state code
+        function getStateFullName(stateCode) {
+            const stateMap = {
+                'MH': 'Maharashtra',
+                'KA': 'Karnataka',
+                'DL': 'Delhi',
+                'TN': 'Tamil Nadu',
+                'GJ': 'Gujarat',
+                'UP': 'Uttar Pradesh',
+                'RJ': 'Rajasthan',
+                'WB': 'West Bengal',
+                'TS': 'Telangana',
+                'AP': 'Andhra Pradesh',
+                'KL': 'Kerala',
+                'HR': 'Haryana',
+                'MP': 'Madhya Pradesh',
+                'PB': 'Punjab',
+                'BR': 'Bihar',
+                'OR': 'Odisha',
+                'CH': 'Chandigarh',
+                'JK': 'Jammu & Kashmir',
+                'AS': 'Assam',
+                'JH': 'Jharkhand',
+                'UK': 'Uttarakhand',
+                'HP': 'Himachal Pradesh',
+                'GA': 'Goa',
+                'PY': 'Puducherry',
+                'CT': 'Chhattisgarh',
+                'SK': 'Sikkim',
+                'ML': 'Meghalaya',
+                'MN': 'Manipur',
+                'TR': 'Tripura',
+                'AR': 'Arunachal Pradesh',
+                'NL': 'Nagaland',
+                'MZ': 'Mizoram',
+                'AN': 'Andaman & Nicobar',
+                'DD': 'Daman & Diu',
+                'DN': 'Dadra & Nagar Haveli',
+                'LD': 'Lakshadweep'
+            };
+            return stateMap[stateCode] || stateCode;
+        }
+
+        // Handle file upload preview
+        function handleFileUpload(files) {
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            previewContainer.innerHTML = '';
+            
+            // Display preview of uploaded images
+            for (let i = 0; i < Math.min(files.length, 6); i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('preview-image');
+                    previewContainer.appendChild(img);
+                }
+                
+                reader.readAsDataURL(file);
+            }
+            
+            if (files.length > 6) {
+                const more = document.createElement('div');
+                more.classList.add('preview-image', 'd-flex', 'justify-content-center', 'align-items-center', 'bg-dark');
+                more.style.color = 'white';
+                more.innerHTML = `+${files.length - 6} more`;
+                previewContainer.appendChild(more);
+            }
+        }
+
+        // Simulate image analysis with AI
+        function analyzeImages() {
+            const carPhotos = document.getElementById('carPhotos');
+            const analysisResult = document.getElementById('analysisResult');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const continueButtonContainer = document.getElementById('continueButtonContainer');
+            const getOfferBtn = document.getElementById('getOfferBtn');
+            
+            // Validation check
+            if (carPhotos.files.length < 1) {
+                alert('Please upload at least one photo of your car');
+                return;
+            }
+            
+            // Show loading overlay
+            loadingOverlay.style.display = 'flex';
+            
+            // Simulate AI processing time
+            setTimeout(() => {
+                // Hide loading overlay
+                loadingOverlay.style.display = 'none';
+                
+                // Show analysis result
+                analysisResult.style.display = 'block';
+                
+                // Populate detected issues (simulated)
+                populateDetectedIssues();
+                
+                // Update buttons
+                getOfferBtn.style.display = 'none';
+                continueButtonContainer.style.display = 'block';
+                
+                // Scroll to results
+                analysisResult.scrollIntoView({behavior: 'smooth'});
+            }, 3000); // Simulate 3-second processing time
+        }
+
+        // Function to populate detected issues based on photos (simulated)
+        function populateDetectedIssues() {
+            const detectedIssues = document.getElementById('detectedIssues');
+            detectedIssues.innerHTML = '';
+            
+            // Get license plate to determine which car we're dealing with
+            const licensePlate = document.getElementById('summaryPlate').textContent.toUpperCase().replace(/\s/g, '');
+            
+            // Simulated issues based on the vehicle
+            let issues = [];
+            
+            // Generate different issues based on the license plate
+            switch(licensePlate) {
+                case 'MH01AB1234': // Maruti Swift
+                    issues = [
+                        { description: 'Minor scratch on rear bumper', severity: 'low' },
+                        { description: 'Small dent on passenger door', severity: 'low' }
+                    ];
+                    break;
+                case 'KA02XY5678': // Hyundai Creta
+                    issues = [
+                        { description: 'Windshield chip', severity: 'medium' },
+                        { description: 'Worn brake pads', severity: 'medium' }
+                    ];
+                    break;
+                case 'DL03CD9012': // Tata Nexon
+                    issues = [
+                        { description: 'Significant rust on undercarriage', severity: 'high' },
+                        { description: 'Clutch issues detected', severity: 'high' }
+                    ];
+                    break;
+                case 'TN04GH3456': // Mahindra XUV700
+                    issues = [
+                        { description: 'AC performance degradation', severity: 'medium' }
+                    ];
+                    break;
+                case 'GJ05JK7890': // Toyota Fortuner
+                    issues = [
+                        { description: 'Worn tires', severity: 'medium' },
+                        { description: 'Minor interior wear', severity: 'low' }
+                    ];
+                    break;
+                default:
+                    issues = [
+                        { description: 'Minor wear and tear consistent with age', severity: 'low' }
+                    ];
+            }
+            
+            // Add issues to the UI
+            issues.forEach(issue => {
+                const damageItem = document.createElement('div');
+                damageItem.classList.add('damage-item');
+                
+                damageItem.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="mb-0">${issue.description}</p>
+                        <span class="damage-severity severity-${issue.severity}">
+                            ${issue.severity.charAt(0).toUpperCase() + issue.severity.slice(1)}
+                        </span>
+                    </div>
+                `;
+                
+                detectedIssues.appendChild(damageItem);
+            });
+            
+            // Update estimated value based on the license plate and detected issues
+            updateEstimatedValue(licensePlate, issues);
+        }
+
+        // Update estimated value based on license plate and detected issues
+        function updateEstimatedValue(licensePlate, issues) {
+            let baseValue = 0;
+            
+            // Base values for each vehicle (in ₹)
+            switch(licensePlate) {
+                case 'MH01AB1234': // Maruti Swift 2019
+                    baseValue = 650000;
+                    break;
+                case 'KA02XY5678': // Hyundai Creta 2020
+                    baseValue = 1200000;
+                    break;
+                case 'DL03CD9012': // Tata Nexon 2018
+                    baseValue = 800000;
+                    break;
+                case 'TN04GH3456': // Mahindra XUV700 2021
+                    baseValue = 1800000;
+                    break;
+                case 'GJ05JK7890': // Toyota Fortuner 2017
+                    baseValue = 2500000;
+                    break;
+                default:
+                    baseValue = 700000;
+            }
+            
+            // Calculate deductions based on issues
+            let totalDeduction = 0;
+            issues.forEach(issue => {
+                switch(issue.severity) {
+                    case 'low':
+                        totalDeduction += baseValue * 0.01; // 1% deduction
+                        break;
+                    case 'medium':
+                        totalDeduction += baseValue * 0.03; // 3% deduction
+                        break;
+                    case 'high':
+                        totalDeduction += baseValue * 0.08; // 8% deduction
+                        break;
+                }
+            });
+            
+            // Calculate final value
+            const finalValue = Math.round(baseValue - totalDeduction);
+            const minValue = Math.round(finalValue * 0.95); // 5% range
+            const maxValue = Math.round(finalValue * 1.05); // 5% range
+            
+            // Format as Indian Rupees
+            const formatter = new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                maximumFractionDigits: 0
+            });
+            
+            // Update UI
+            document.getElementById('estimatedValue').textContent = formatter.format(finalValue);
+            document.getElementById('minValue').textContent = formatter.format(minValue);
+            document.getElementById('maxValue').textContent = formatter.format(maxValue);
+            
+            // Update progress bar based on overall condition
+            const conditionRatio = calculateConditionRatio(issues);
+            document.querySelector('.progress-bar').style.width = `${conditionRatio}%`;
+        }
+
+        // Calculate condition ratio based on issues
+        function calculateConditionRatio(issues) {
+            if (issues.length === 0) return 95; // Excellent condition
+            
+            let severityPoints = 0;
+            issues.forEach(issue => {
+                switch(issue.severity) {
+                    case 'low':
+                        severityPoints += 5;
+                        break;
+                    case 'medium':
+                        severityPoints += 10;
+                        break;
+                    case 'high':
+                        severityPoints += 20;
+                        break;
+                }
+            });
+            
+            // Calculate condition (100 - deductions)
+            const condition = Math.max(10, Math.min(95, 95 - severityPoints));
+            return condition;
+        }
+
+        // Initialize date picker with tomorrow as minimum date
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const formattedDate = tomorrow.toISOString().split('T')[0];
+            document.getElementById('pickupDate').min = formattedDate;
+        });
+    </script>
