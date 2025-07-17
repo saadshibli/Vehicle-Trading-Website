@@ -1,0 +1,34 @@
+.badge-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.card-img-top {
+    height: 180px;
+    object-fit: cover;
+}
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+.button-group .btn {
+    flex: 1;
+    white-space: nowrap;
+}
+/* Ensure tab headings are always visible */
+.nav-tabs .nav-link {
+    opacity: 1 !important;
+    color: #333 !important;
+}
+/* Ensure content headings are always visible */
+.tab-content h5 {
+    display: block !important;
+    opacity: 1 !important;
+}
+.toast-container {
+    z-index: 1080;
+} 

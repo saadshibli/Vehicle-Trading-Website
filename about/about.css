@@ -1,0 +1,159 @@
+/* Custom Styles */
+.about-hero {
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                url('https://images.unsplash.com/photo-1485291571150-772bcfc10da5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2060&q=80');
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.about-hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.about-hero p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+.about-section {
+    padding: 80px 0;
+}
+
+.about-section h2 {
+    color: #0d6efd;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+.about-section p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+}
+
+.team-section {
+    padding: 80px 0;
+    background: #f8f9fa;
+}
+
+.team-section h2 {
+    color: #0d6efd;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+.team-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.team-card:hover {
+    transform: translateY(-10px);
+}
+
+.team-card img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    object-fit: cover;
+}
+
+.team-card h4 {
+    color: #0d6efd;
+    margin-bottom: 10px;
+}
+
+.team-card p {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.values-section {
+    padding: 80px 0;
+}
+
+.values-section h2 {
+    color: #0d6efd;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+.value-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    transition: transform 0.3s;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.value-card:hover {
+    transform: translateY(-10px);
+}
+
+.value-card i {
+    font-size: 3rem;
+    color: #0d6efd;
+    margin-bottom: 20px;
+}
+
+.value-card h4 {
+    color: #0d6efd;
+    margin-bottom: 10px;
+}
+
+.value-card p {
+    color: #777;
+    font-size: 0.9rem;
+}
+.about-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.icon-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bg-gradient-navy-gold {
+    background: linear-gradient(45deg, #1e3c72, #ffc107);
+}
+
+.feature-card {
+    transition: transform 0.3s ease;
+    border-radius: 8px;
+    border: 1px solid rgba(30, 60, 114, 0.1);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.max-w-600 {
+    max-width: 600px;
+}
+
+.text-small {
+    font-size: 0.9rem;
+    color: #6c757d;
+} 

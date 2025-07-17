@@ -94,6 +94,68 @@ function initTooltipsAndPopovers() {
     });
 }
 
+// Render cart items on cart page
+function renderCart() {
+    const cartContent = document.getElementById('cartContent');
+    const cartSummary = document.getElementById('cartSummary');
+    if (!cartContent) return;
+    cart = JSON.parse(localStorage.getItem('carCart')) || [];
+    if (cart.length === 0) {
+        cartContent.innerHTML = '<div class="alert alert-info">Your cart is empty.</div>';
+        if (cartSummary) cartSummary.innerHTML = '';
+        return;
+    }
+    let total = 0;
+    cartContent.innerHTML = cart.map(item => {
+        total += parseFloat(item.price.replace(/[^\d.]/g, '')) * item.quantity;
+        return `
+            <div class="card mb-3">
+                <div class="row g-0 align-items-center">
+                    <div class="col-md-2">
+                        <img src="${item.image}" class="img-fluid rounded" alt="${item.title}">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h5 class="card-title mb-1">${item.title}</h5>
+                            <p class="mb-1">Year: ${item.year}</p>
+                            <p class="mb-1">Price: <span class="text-primary">${item.price}</span></p>
+                            <p class="mb-1">Quantity: ${item.quantity}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end pe-4">
+                        <button class="btn btn-danger btn-sm remove-item" data-car-id="${item.id}">Remove</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+    if (cartSummary) {
+        cartSummary.innerHTML = `
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">Total:</span>
+                        <span class="h5 text-success mb-0">₹${total.toLocaleString()}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    // Remove item event
+    cartContent.querySelectorAll('.remove-item').forEach(btn => {
+        btn.addEventListener('click', function() {
+            removeFromCart(this.getAttribute('data-car-id'));
+        });
+    });
+}
+
+function removeFromCart(carId) {
+    cart = cart.filter(item => item.id !== carId);
+    localStorage.setItem('carCart', JSON.stringify(cart));
+    renderCart();
+    updateCartCount();
+}
+
 // Document ready function
 document.addEventListener('DOMContentLoaded', function() {
     updateCartCount();
@@ -116,4 +178,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+
+    if (document.getElementById('cartContent')) {
+        renderCart();
+    }
 });
